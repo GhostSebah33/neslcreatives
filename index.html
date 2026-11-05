@@ -431,7 +431,9 @@ footer { padding-bottom: 96px; }
   }
 
   var FORM_ENDPOINT = "https://api.web3forms.com/submit";
-  var ACCESS_KEY = "__WEB3FORMS_KEY__";
+  var ACCESS_KEY = "681e8a44-b36e-44db-a074-407e3720a290";
+
+  function validEmail(v) { return /^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(v); }
 
   async function send(form, subject) {
     var data = Object.fromEntries(new FormData(form));
