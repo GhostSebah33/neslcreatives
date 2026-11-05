@@ -1,0 +1,4 @@
+# Statisk side: ingen build-kommando, filerne udgives direkte fra roden.
+[build]
+  publish = "."
+  command = "echo 'Ingen build nødvendig'"
