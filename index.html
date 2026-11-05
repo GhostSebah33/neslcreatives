@@ -264,9 +264,8 @@ footer { padding-bottom: 96px; }
     </div>
 
     <div class="tool">
-      <form class="tool-form" id="map-form" name="markedsmapping" method="POST" action="/" data-netlify="true" netlify-honeypot="bot-field" novalidate>
-        <input type="hidden" name="form-name" value="markedsmapping">
-        <label class="hp">Udfyld ikke dette felt<input name="bot-field" tabindex="-1" autocomplete="off"></label>
+      <form class="tool-form" id="map-form" name="markedsmapping" novalidate>
+        <label class="hp">Udfyld ikke dette felt<input name="_honey" tabindex="-1" autocomplete="off"></label>
         <label for="m-company">Virksomhedens navn<input id="m-company" name="virksomhed" required placeholder="F.eks. Nordisk Rengøring ApS"></label>
         <label for="m-industry">Branche<input id="m-industry" name="branche" required placeholder="F.eks. Erhvervsrengøring"></label>
         <label class="full" for="m-product">Hvad sælger I?<textarea id="m-product" name="produkt" required placeholder="Beskriv jeres produkt eller ydelse med et par sætninger"></textarea></label>
@@ -333,9 +332,8 @@ footer { padding-bottom: 96px; }
         <p>Book et møde med NESLCreatives. Vi gennemgår jeres markedsmapping sammen, og når I har købt analysen, får I adgang til alle kunder, målgrupper og konkurrenter.</p>
         <div class="price"><b>Fuld markedsmapping</b><span>Pris aftales på mødet</span></div>
       </div>
-      <form class="book-form" id="book-form" name="booking" method="POST" action="/" data-netlify="true" netlify-honeypot="bot-field" novalidate>
-        <input type="hidden" name="form-name" value="booking">
-        <label class="hp">Udfyld ikke dette felt<input name="bot-field" tabindex="-1" autocomplete="off"></label>
+      <form class="book-form" id="book-form" name="booking" novalidate>
+        <label class="hp">Udfyld ikke dette felt<input name="_honey" tabindex="-1" autocomplete="off"></label>
         <label for="b-name">Navn<input id="b-name" name="navn" autocomplete="name" required></label>
         <label for="b-company">Virksomhed<input id="b-company" name="virksomhed" autocomplete="organization"></label>
         <label for="b-email">E-mail<input id="b-email" name="email" type="email" autocomplete="email" required></label>
@@ -432,19 +430,34 @@ footer { padding-bottom: 96px; }
     box.appendChild(locked);
   }
 
-  function encode(form) {
-    return new URLSearchParams(new FormData(form)).toString();
-  }
+  var FORM_ENDPOINT = "https://formsubmit.co/ajax/seb.b.lund@gmail.com";
 
   function validEmail(v) { return /^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(v); }
 
-  async function send(form) {
-    var res = await fetch("/", {
+  async function send(form, subject) {
+    var data = Object.fromEntries(new FormData(form));
+    if (data._honey) return;
+    delete data._honey;
+    data._subject = subject;
+    data._template = "table";
+    data._captcha = "false";
+    var res = await fetch(FORM_ENDPOINT, {
       method: "POST",
-      headers: { "Content-Type": "application/x-www-form-urlencoded" },
-      body: encode(form)
+      headers: { "Content-Type": "application/json", "Accept": "application/json" },
+      body: JSON.stringify(data)
     });
-    if (!res.ok) throw new Error("HTTP " + res.status);
+    var body = {};
+    try { body = await res.json(); } catch (e) {}
+    if (!res.ok || String(body.success) !== "true") {
+      var msg = String(body.message || "");
+      if (/activat/i.test(msg)) throw { activation: true };
+      throw new Error(msg || "HTTP " + res.status);
+    }
+  }
+  function failCopy(err) {
+    return err && err.activation
+      ? "Formularen er ikke aktiveret endnu. Prøv igen om lidt."
+      : "Det lykkedes ikke at sende. Prøv igen om lidt.";
   }
 
   $("map-form").addEventListener("submit", async function (e) {
@@ -462,7 +475,7 @@ footer { padding-bottom: 96px; }
     btn.disabled = true;
     st.textContent = "Sender …";
     try {
-      await send(this);
+      await send(this, "Ny markedsmapping: " + $("m-company").value.trim());
       st.textContent = "Tak! Vi sender jeres første 3 kunder til " + $("m-email").value.trim() + " inden for to hverdage.";
       if (!$("b-company").value) $("b-company").value = $("m-company").value.trim();
       if (!$("b-name").value) $("b-name").value = $("m-name").value.trim();
@@ -470,7 +483,7 @@ footer { padding-bottom: 96px; }
       this.reset();
     } catch (err) {
       st.className = "status err";
-      st.textContent = "Det lykkedes ikke at sende. Prøv igen om lidt.";
+      st.textContent = failCopy(err);
     } finally {
       btn.disabled = false;
     }
@@ -489,12 +502,12 @@ footer { padding-bottom: 96px; }
     btn.disabled = true;
     note.textContent = "Sender …";
     try {
-      await send(this);
+      await send(this, "Ny mødebooking: " + $("b-name").value.trim());
       note.textContent = "Tak! Din booking er modtaget. Vi kontakter dig for at bekræfte mødet.";
       this.reset();
     } catch (err) {
       note.className = "form-note err";
-      note.textContent = "Det lykkedes ikke at sende. Prøv igen om lidt.";
+      note.textContent = failCopy(err);
     } finally {
       btn.disabled = false;
     }

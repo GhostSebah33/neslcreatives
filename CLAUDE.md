@@ -4,7 +4,8 @@ Hjemmeside for NESLCreatives: AI-effektivisering, marketing og markedsmapping fo
 
 ## Opbygning
 - Én statisk side: `index.html` (HTML, CSS og JS i samme fil, ingen build-trin).
-- Hostes på Netlify. Formularerne `markedsmapping` og `booking` bruger Netlify Forms (`data-netlify="true"`).
+- Hostes på Netlify (neslcreatives.netlify.app). Netlify Forms bruges ikke.
+- Formularerne sendes med `fetch` til FormSubmit (`FORM_ENDPOINT` i scriptet), som videresender dem som mail. `_honey` er et spamfelt.
 - Al tekst på siden er på dansk.
 
 ## Design
@@ -14,4 +15,4 @@ Hjemmeside for NESLCreatives: AI-effektivisering, marketing og markedsmapping fo
 
 ## Når du ændrer noget
 - Åbn siden i en browser på mobil- og desktopbredde og tjek, at intet flyder over.
-- Ændr ikke formularernes `name`-attributter uden at sige det, da Netlify gemmer felterne under de navne.
+- Feltnavnene (`name`) bliver til overskrifterne i de mails, der sendes, så hold dem korte og på dansk.
