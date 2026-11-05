@@ -434,6 +434,42 @@ footer { padding-bottom: 96px; }
 
   function validEmail(v) { return /^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(v); }
 
+  var FORM_POST = "https://formsubmit.co/seb.b.lund@gmail.com";
+
+  // Reserve: et almindeligt formular-POST i en skjult iframe. Det kan Safari ikke blokere som CORS.
+  function postViaIframe(data) {
+    return new Promise(function (resolve) {
+      var name = "fs-" + Date.now();
+      var frame = document.createElement("iframe");
+      frame.name = name;
+      frame.hidden = true;
+      var f = document.createElement("form");
+      f.method = "POST";
+      f.action = FORM_POST;
+      f.target = name;
+      f.hidden = true;
+      Object.keys(data).forEach(function (k) {
+        var i = document.createElement("input");
+        i.type = "hidden";
+        i.name = k;
+        i.value = data[k];
+        f.appendChild(i);
+      });
+      var done = false;
+      function finish() {
+        if (done) return;
+        done = true;
+        resolve();
+        setTimeout(function () { frame.remove(); f.remove(); }, 5000);
+      }
+      frame.addEventListener("load", finish);
+      setTimeout(finish, 8000);
+      document.body.appendChild(frame);
+      document.body.appendChild(f);
+      f.submit();
+    });
+  }
+
   async function send(form, subject) {
     var data = Object.fromEntries(new FormData(form));
     if (data._honey) return;
@@ -441,11 +477,18 @@ footer { padding-bottom: 96px; }
     data._subject = subject;
     data._template = "table";
     data._captcha = "false";
-    var res = await fetch(FORM_ENDPOINT, {
-      method: "POST",
-      headers: { "Content-Type": "application/json", "Accept": "application/json" },
-      body: JSON.stringify(data)
-    });
+
+    var fd = new FormData();
+    Object.keys(data).forEach(function (k) { fd.append(k, data[k]); });
+
+    var res;
+    try {
+      // Uden JSON-header, så browseren ikke laver en ekstra CORS-forespørgsel først.
+      res = await fetch(FORM_ENDPOINT, { method: "POST", headers: { "Accept": "application/json" }, body: fd });
+    } catch (networkErr) {
+      await postViaIframe(data);
+      return;
+    }
     var body = {};
     try { body = await res.json(); } catch (e) {}
     if (!res.ok || String(body.success) !== "true") {
@@ -456,7 +499,7 @@ footer { padding-bottom: 96px; }
   }
   function failCopy(err) {
     return err && err.activation
-      ? "Formularen er ikke aktiveret endnu. Prøv igen om lidt."
+      ? "Formularen er ikke aktiveret endnu. Tjek mailen fra FormSubmit og tryk Activate Form."
       : "Det lykkedes ikke at sende. Prøv igen om lidt." + (err && err.message ? " (" + err.message + ")" : "");
   }
 
