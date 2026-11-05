@@ -457,7 +457,7 @@ footer { padding-bottom: 96px; }
   function failCopy(err) {
     return err && err.activation
       ? "Formularen er ikke aktiveret endnu. Prøv igen om lidt."
-      : "Det lykkedes ikke at sende. Prøv igen om lidt.";
+      : "Det lykkedes ikke at sende. Prøv igen om lidt." + (err && err.message ? " (" + err.message + ")" : "");
   }
 
   $("map-form").addEventListener("submit", async function (e) {
