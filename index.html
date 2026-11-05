@@ -1,0 +1,504 @@
+<!doctype html>
+<html lang="da">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>NESLCreatives</title>
+<meta name="description" content="NESLCreatives hjælper virksomheder med AI-effektivisering, marketing og markedsmapping, så de finder de rigtige kunder.">
+<meta property="og:title" content="NESLCreatives">
+<meta property="og:description" content="AI, marketing og markedsmapping til danske virksomheder.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cpath d='M3 12c5-6 10 6 15 0s9-4 11-2' fill='none' stroke='%23127C74' stroke-width='3' stroke-linecap='round'/%3E%3Cpath d='M3 21c5-6 10 6 15 0s9-4 11-2' fill='none' stroke='%237FB8C9' stroke-width='3' stroke-linecap='round'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,700&family=Figtree:wght@400;500;600&display=swap">
+<style>
+/* Layout: one calm column that flows top to bottom; soft drifting color fields in the hero, the mapping tool as the one framed object, quiet sections around it. */
+:root {
+  --bg: #F3F6F7;
+  --surface: #FFFFFF;
+  --ink: #10242B;
+  --muted: #4E6168;
+  --accent: #127C74;
+  --accent-soft: #7FB8C9;
+  --line: #D6E0E3;
+  --on-accent: #FFFFFF;
+  --warm: #B4661F;
+  --display: "Bricolage Grotesque", "Segoe UI", system-ui, sans-serif;
+  --body: "Figtree", "Segoe UI", system-ui, sans-serif;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0C181C; --surface: #13242A; --ink: #E6F0F1; --muted: #9DB2B7;
+    --accent: #4FC2B5; --accent-soft: #3B7C90; --line: #23383E; --on-accent: #06211E; --warm: #E8A15C;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0C181C; --surface: #13242A; --ink: #E6F0F1; --muted: #9DB2B7;
+  --accent: #4FC2B5; --accent-soft: #3B7C90; --line: #23383E; --on-accent: #06211E; --warm: #E8A15C;
+  color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--body);
+  font-size: 17px;
+  line-height: 1.6;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  overflow-x: hidden;
+}
+.wrap { max-width: 1080px; margin: 0 auto; }
+h1, h2, h3 { font-family: var(--display); line-height: 1.1; text-wrap: balance; margin: 0; letter-spacing: -0.02em; }
+p { margin: 0; }
+a { color: inherit; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 6px; }
+
+/* Nav */
+nav { display: flex; justify-content: space-between; align-items: center; padding-block: 24px; gap: 16px; }
+.logo { font-family: var(--display); font-weight: 700; font-size: 21px; text-decoration: none; display: flex; align-items: center; gap: 10px; letter-spacing: -0.01em; }
+.logo span { color: var(--accent); font-weight: 600; }
+.logo svg { width: 28px; height: 28px; flex: none; }
+nav .links { display: flex; gap: 24px; font-size: 15px; color: var(--muted); }
+nav .links a { text-decoration: none; }
+nav .links a:hover { color: var(--ink); }
+@media (max-width: 680px) { nav .links { display: none; } }
+
+/* Hero */
+.hero { position: relative; padding-block: 64px 88px; }
+.fields { position: absolute; inset: -40px -10vw 0; z-index: 0; pointer-events: none; overflow: hidden; }
+.field { position: absolute; border-radius: 50%; filter: blur(70px); opacity: .55; }
+.f1 { width: 420px; height: 420px; background: var(--accent-soft); top: 0; right: 4%; animation: drift1 18s ease-in-out infinite alternate; }
+.f2 { width: 340px; height: 340px; background: var(--accent); top: 160px; right: 24%; opacity: .28; animation: drift2 22s ease-in-out infinite alternate; }
+@keyframes drift1 { to { transform: translate(-60px, 50px) scale(1.08); } }
+@keyframes drift2 { to { transform: translate(70px, -40px) scale(.92); } }
+.hero-inner { position: relative; z-index: 1; max-width: 760px; display: grid; gap: 28px; }
+.eyebrow { font-size: 13px; letter-spacing: .12em; text-transform: uppercase; color: var(--accent); font-weight: 600; }
+.hero h1 { font-size: clamp(42px, 7vw, 78px); font-weight: 600; }
+.hero h1 em { font-style: normal; color: var(--accent); }
+.lead { font-size: clamp(18px, 2.2vw, 21px); color: var(--muted); max-width: 58ch; }
+.actions { display: flex; gap: 14px; flex-wrap: wrap; }
+.btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; padding: 14px 24px; border-radius: 999px; font-weight: 600; font-size: 16px; text-decoration: none; border: 1px solid transparent; cursor: pointer; font-family: var(--body); transition: transform .2s ease, background .2s ease, opacity .2s; }
+.btn:hover { transform: translateY(-2px); }
+.btn:disabled { opacity: .6; cursor: default; transform: none; }
+.btn-primary { background: var(--accent); color: var(--on-accent); }
+.btn-ghost { border-color: var(--line); color: var(--ink); background: transparent; }
+
+/* Sections */
+section { padding-block: 72px; }
+.section-head { display: grid; gap: 12px; max-width: 640px; margin-bottom: 40px; }
+.section-head h2 { font-size: clamp(30px, 4.4vw, 44px); font-weight: 600; }
+.section-head p { color: var(--muted); }
+
+/* Services */
+.services { display: grid; grid-template-columns: repeat(3, 1fr); gap: 40px; }
+@media (max-width: 860px) { .services { grid-template-columns: 1fr; gap: 36px; } }
+.service { display: grid; gap: 12px; align-content: start; padding-top: 24px; border-top: 1px solid var(--line); min-width: 0; }
+.service h3 { font-size: 23px; font-weight: 600; }
+.service p { color: var(--muted); }
+.service ul { margin: 4px 0 0; padding: 0; list-style: none; display: grid; gap: 6px; font-size: 15px; }
+.service li { display: flex; gap: 10px; }
+.service li::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: var(--accent); margin-top: 10px; flex: none; }
+
+/* Tool */
+.tool { background: var(--surface); border: 1px solid var(--line); border-radius: 28px; padding: clamp(20px, 4vw, 44px); display: grid; gap: 36px; }
+.tool-form { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px 20px; }
+@media (max-width: 640px) { .tool-form { grid-template-columns: 1fr; } }
+.tool-form .full { grid-column: 1 / -1; }
+label { font-size: 14px; font-weight: 500; display: grid; gap: 6px; min-width: 0; }
+input, textarea, select { font: inherit; font-size: 16px; padding: 12px 14px; border-radius: 12px; border: 1px solid var(--line); background: var(--bg); color: var(--ink); width: 100%; min-width: 0; }
+textarea { min-height: 96px; resize: vertical; }
+.tool-actions { grid-column: 1 / -1; display: flex; gap: 16px; align-items: center; flex-wrap: wrap; }
+.status { font-size: 14px; color: var(--muted); }
+.status.err { color: var(--warm); }
+
+.results { display: grid; gap: 24px; border-top: 1px solid var(--line); padding-top: 32px; }
+.results-head { display: grid; gap: 10px; max-width: 70ch; }
+.results-head h3 { font-size: 24px; font-weight: 600; }
+.results-head p { color: var(--muted); }
+.tag { display: inline-block; justify-self: start; font-size: 12px; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; padding: 4px 10px; border-radius: 999px; background: var(--bg); color: var(--muted); border: 1px solid var(--line); }
+.tag.live { color: var(--accent); border-color: var(--accent); }
+
+.leads { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+@media (max-width: 860px) { .leads { grid-template-columns: 1fr; } }
+.lead-card { background: var(--bg); border-radius: 18px; padding: 20px; display: grid; gap: 10px; align-content: start; min-width: 0; }
+.lead-top { display: flex; justify-content: space-between; gap: 12px; align-items: start; }
+.lead-card h4 { margin: 0; font-family: var(--display); font-size: 19px; font-weight: 600; line-height: 1.2; overflow-wrap: anywhere; }
+.lead-meta { font-size: 14px; color: var(--muted); }
+.lead-why { font-size: 15px; }
+.lead-contact { font-size: 14px; color: var(--muted); }
+.lead-contact b { color: var(--ink); font-weight: 600; }
+.score { flex: none; font-size: 13px; font-weight: 600; padding: 4px 10px; border-radius: 999px; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.score.hot { background: var(--accent); color: var(--on-accent); }
+.score.warm { background: transparent; color: var(--accent); border: 1px solid var(--accent); }
+.score.cold { background: transparent; color: var(--muted); border: 1px solid var(--line); }
+.verify { font-size: 13px; color: var(--muted); }
+
+.locked { position: relative; border-radius: 20px; overflow: hidden; border: 1px solid var(--line); }
+.locked-bg { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; padding: 20px; filter: blur(6px); opacity: .7; pointer-events: none; user-select: none; }
+@media (max-width: 860px) { .locked-bg { grid-template-columns: 1fr; } }
+.ghost { background: var(--bg); border-radius: 16px; padding: 18px; display: grid; gap: 10px; }
+.bar { height: 10px; border-radius: 6px; background: var(--line); }
+.bar.w60 { width: 60%; } .bar.w80 { width: 80%; } .bar.w40 { width: 40%; } .bar.acc { background: var(--accent-soft); width: 30%; }
+.locked-over { position: absolute; inset: 0; display: grid; place-items: center; padding: 20px; background: color-mix(in srgb, var(--surface) 55%, transparent); }
+.locked-box { display: grid; gap: 14px; justify-items: center; text-align: center; max-width: 460px; }
+.locked-box svg { width: 34px; height: 34px; }
+.locked-box h4 { margin: 0; font-family: var(--display); font-size: 22px; font-weight: 600; line-height: 1.2; text-wrap: balance; }
+.locked-box p { color: var(--muted); font-size: 15px; }
+.locked-list { list-style: none; padding: 0; margin: 0; display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; }
+.locked-list li { font-size: 13px; font-weight: 600; padding: 4px 12px; border-radius: 999px; border: 1px solid var(--line); background: var(--surface); }
+
+/* Process */
+.steps { display: grid; grid-template-columns: repeat(4, 1fr); gap: 32px; }
+@media (max-width: 860px) { .steps { grid-template-columns: 1fr 1fr; } }
+@media (max-width: 480px) { .steps { grid-template-columns: 1fr; } }
+.step { display: grid; gap: 10px; align-content: start; min-width: 0; }
+.step .num { font-family: var(--display); font-size: 15px; color: var(--accent); font-weight: 600; }
+.step h3 { font-size: 20px; font-weight: 600; }
+.step p { color: var(--muted); font-size: 15.5px; }
+.flowline { height: 2px; background: linear-gradient(90deg, var(--accent), var(--accent-soft), transparent); margin-bottom: 40px; border-radius: 2px; }
+
+/* Booking */
+.contact { background: var(--surface); border: 1px solid var(--line); border-radius: 28px; padding: clamp(24px, 5vw, 56px); display: grid; grid-template-columns: 1fr 1.1fr; gap: 48px; }
+@media (max-width: 860px) { .contact { grid-template-columns: 1fr; gap: 32px; } }
+.contact .text { display: grid; gap: 16px; align-content: start; min-width: 0; }
+.contact h2 { font-size: clamp(28px, 4vw, 40px); font-weight: 600; }
+.contact .text p { color: var(--muted); }
+.price { display: grid; gap: 4px; padding: 18px 20px; border-radius: 16px; background: var(--bg); }
+.price b { font-family: var(--display); font-size: 20px; }
+.price span { color: var(--muted); font-size: 15px; }
+.book-form { display: grid; grid-template-columns: 1fr 1fr; gap: 14px 16px; min-width: 0; }
+.book-form .full { grid-column: 1 / -1; }
+@media (max-width: 520px) { .book-form { grid-template-columns: 1fr; } }
+.form-note { font-size: 14px; color: var(--accent); min-height: 1.4em; grid-column: 1 / -1; }
+.form-note.err { color: var(--warm); }
+
+footer { padding-block: 48px; color: var(--muted); font-size: 14px; display: flex; justify-content: space-between; flex-wrap: wrap; gap: 12px; }
+
+@media (prefers-reduced-motion: reduce) {
+  .field { animation: none; }
+  .btn { transition: none; }
+  html { scroll-behavior: auto; }
+}
+html { overflow-x: hidden; }
+body { margin: 0; }
+.form-sub { grid-column: 1 / -1; font-family: var(--display); font-size: 18px; font-weight: 600; margin-top: 12px; padding-top: 20px; border-top: 1px solid var(--line); }
+.hp { position: absolute; left: -9999px; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <nav>
+    <a class="logo" href="#top" aria-label="NESLCreatives forside">
+      <svg viewBox="0 0 32 32" aria-hidden="true"><path d="M3 12c5-6 10 6 15 0s9-4 11-2" fill="none" stroke="var(--accent)" stroke-width="3" stroke-linecap="round"/><path d="M3 21c5-6 10 6 15 0s9-4 11-2" fill="none" stroke="var(--accent-soft)" stroke-width="3" stroke-linecap="round"/></svg>
+      NESL<span>Creatives</span>
+    </a>
+    <div class="links">
+      <a href="#ydelser">Ydelser</a>
+      <a href="#mapping">Markedsmapping</a>
+      <a href="#proces">Sådan arbejder vi</a>
+      <a href="#book">Book møde</a>
+    </div>
+  </nav>
+
+  <header class="hero" id="top">
+    <div class="fields" aria-hidden="true"><div class="field f1"></div><div class="field f2"></div></div>
+    <div class="hero-inner">
+      <span class="eyebrow">AI til danske virksomheder</span>
+      <h1>Få arbejdet til at <em>flyde</em> og blive set.</h1>
+      <p class="lead">NESLCreatives hjælper virksomheder med at bruge AI til at spare tid på de daglige opgaver, lave marketing der virker, og finde de kunder, der passer bedst til jer.</p>
+      <div class="actions">
+        <a class="btn btn-primary" href="#mapping">Få dine første kunder gratis</a>
+        <a class="btn btn-ghost" href="#book">Book et møde</a>
+      </div>
+    </div>
+  </header>
+
+  <section id="ydelser">
+    <div class="section-head">
+      <span class="eyebrow">Ydelser</span>
+      <h2>Tre ting, der giver mere tid og flere kunder</h2>
+    </div>
+    <div class="services">
+      <article class="service">
+        <h3>Effektivisering med AI</h3>
+        <p>Vi finder de opgaver, der tager mest tid, og lader AI klare dem.</p>
+        <ul>
+          <li>Automatiske svar, referater og rapporter</li>
+          <li>Mindre manuelt arbejde i regneark og CRM</li>
+          <li>Oplæring, så jeres team selv kan bruge det</li>
+        </ul>
+      </article>
+      <article class="service">
+        <h3>Marketing og synlighed</h3>
+        <p>Indhold, der lyder som jer, og som når ud til de rigtige kunder.</p>
+        <ul>
+          <li>Opslag til LinkedIn og sociale medier</li>
+          <li>Nyhedsbreve, kampagner og landingssider</li>
+          <li>En fast plan, så I altid er synlige</li>
+        </ul>
+      </article>
+      <article class="service">
+        <h3>Markedsmapping</h3>
+        <p>Et klart billede af jeres kunder, konkurrenter og muligheder.</p>
+        <ul>
+          <li>Hvem er de bedste kunder for jer?</li>
+          <li>Hvem konkurrerer I med?</li>
+          <li>Hvor er der huller i markedet?</li>
+        </ul>
+      </article>
+    </div>
+  </section>
+
+  <section id="mapping">
+    <div class="section-head">
+      <span class="eyebrow">Markedsmapping</span>
+      <h2>Fortæl os om jeres forretning. Vi finder kunderne.</h2>
+      <p>Udfyld felterne, så sender vi jer de første 3 potentielle kunder gratis inden for to hverdage. Den fulde analyse med alle kunder, målgrupper og konkurrenter får I efter et møde.</p>
+    </div>
+
+    <div class="tool">
+      <form class="tool-form" id="map-form" name="markedsmapping" method="POST" action="/" data-netlify="true" netlify-honeypot="bot-field" novalidate>
+        <input type="hidden" name="form-name" value="markedsmapping">
+        <label class="hp">Udfyld ikke dette felt<input name="bot-field" tabindex="-1" autocomplete="off"></label>
+        <label for="m-company">Virksomhedens navn<input id="m-company" name="virksomhed" required placeholder="F.eks. Nordisk Rengøring ApS"></label>
+        <label for="m-industry">Branche<input id="m-industry" name="branche" required placeholder="F.eks. Erhvervsrengøring"></label>
+        <label class="full" for="m-product">Hvad sælger I?<textarea id="m-product" name="produkt" required placeholder="Beskriv jeres produkt eller ydelse med et par sætninger"></textarea></label>
+        <label for="m-segment">Segment
+          <select id="m-segment" name="segment">
+            <option>B2B (virksomheder)</option>
+            <option>B2C (privatpersoner)</option>
+            <option>Offentlige kunder</option>
+          </select>
+        </label>
+        <label for="m-size">Størrelse på kunderne
+          <select id="m-size" name="kundestoerrelse">
+            <option>Alle størrelser</option>
+            <option>Små (1-10 ansatte)</option>
+            <option>Mellemstore (10-250 ansatte)</option>
+            <option>Store (250+ ansatte)</option>
+          </select>
+        </label>
+        <label class="full" for="m-target">Hvem vil I gerne sælge til?<input id="m-target" name="maalgruppe" required placeholder="F.eks. kontorer og klinikker, hvor driftschefen køber ind"></label>
+        <label for="m-price">Hvad koster det?<input id="m-price" name="pris" placeholder="F.eks. 4.000 kr. om måneden"></label>
+        <label for="m-area">Område
+          <select id="m-area" name="omraade">
+            <option>Hele Danmark</option>
+            <option>Hovedstaden</option>
+            <option>Sjælland</option>
+            <option>Syddanmark</option>
+            <option>Midtjylland</option>
+            <option>Nordjylland</option>
+            <option>Norden</option>
+          </select>
+        </label>
+        <p class="form-sub">Hvor skal vi sende resultatet?</p>
+        <label for="m-name">Dit navn<input id="m-name" name="navn" autocomplete="name" required></label>
+        <label for="m-email">E-mail<input id="m-email" name="email" type="email" autocomplete="email" required></label>
+        <div class="tool-actions">
+          <button class="btn btn-primary" type="submit" id="map-btn">Få mine første kunder</button>
+          <span class="status" id="map-status" role="status"></span>
+        </div>
+      </form>
+
+      <div class="results" id="results"></div>
+    </div>
+  </section>
+
+  <section id="proces">
+    <div class="section-head">
+      <span class="eyebrow">Sådan arbejder vi</span>
+      <h2>Fra første snak til målbare resultater</h2>
+    </div>
+    <div class="flowline" aria-hidden="true"></div>
+    <div class="steps">
+      <div class="step"><span class="num">1</span><h3>Markedsmapping</h3><p>I fortæller om jeres forretning og får de første 3 kunder gratis.</p></div>
+      <div class="step"><span class="num">2</span><h3>Møde</h3><p>Vi gennemgår resultatet sammen og taler om, hvad I gerne vil opnå.</p></div>
+      <div class="step"><span class="num">3</span><h3>Fuld analyse</h3><p>I får alle kunder, målgrupper og konkurrenter samt en plan for, hvordan I når dem.</p></div>
+      <div class="step"><span class="num">4</span><h3>Opfølgning</h3><p>Vi hjælper med marketing og AI-værktøjer, så kunderne bliver til salg.</p></div>
+    </div>
+  </section>
+
+  <section id="book">
+    <div class="contact">
+      <div class="text">
+        <span class="eyebrow">Book et møde</span>
+        <h2>Lås hele analysen op</h2>
+        <p>Book et møde med NESLCreatives. Vi gennemgår jeres markedsmapping sammen, og når I har købt analysen, får I adgang til alle kunder, målgrupper og konkurrenter.</p>
+        <div class="price"><b>Fuld markedsmapping</b><span>Pris aftales på mødet</span></div>
+      </div>
+      <form class="book-form" id="book-form" name="booking" method="POST" action="/" data-netlify="true" netlify-honeypot="bot-field" novalidate>
+        <input type="hidden" name="form-name" value="booking">
+        <label class="hp">Udfyld ikke dette felt<input name="bot-field" tabindex="-1" autocomplete="off"></label>
+        <label for="b-name">Navn<input id="b-name" name="navn" autocomplete="name" required></label>
+        <label for="b-company">Virksomhed<input id="b-company" name="virksomhed" autocomplete="organization"></label>
+        <label for="b-email">E-mail<input id="b-email" name="email" type="email" autocomplete="email" required></label>
+        <label for="b-phone">Telefon<input id="b-phone" name="telefon" type="tel" autocomplete="tel"></label>
+        <label for="b-date">Ønsket dato<input id="b-date" name="dato" type="date"></label>
+        <label for="b-time">Tidspunkt
+          <select id="b-time" name="tidspunkt"><option>Formiddag</option><option>Eftermiddag</option></select>
+        </label>
+        <label class="full" for="b-msg">Besked (valgfri)<textarea id="b-msg" name="besked"></textarea></label>
+        <button class="btn btn-primary full" type="submit" id="book-btn">Book møde</button>
+        <p class="form-note" id="book-note" role="status"></p>
+      </form>
+    </div>
+  </section>
+
+  <footer>
+    <span>© 2026 NESLCreatives</span>
+    <span>AI, marketing og markedsmapping</span>
+  </footer>
+</div>
+
+<script>
+(function () {
+  var FREE = 3;
+  var EXAMPLE = {
+    company: "en rengøringsvirksomhed",
+    resume: "Erhvervsrengøring sælger bedst til virksomheder med faste lokaler og mange besøgende, hvor et rent indtryk betyder noget. Klinikker og mindre kontorfællesskaber skifter oftere leverandør end store koncerner og er hurtigere at lukke.",
+    leads: [
+      { virksomhed: "Tandlægeklinik med 3-6 behandlere", type: "Sundhed", by: "Aarhus", hvorfor: "Høje krav til hygiejne og daglig rengøring. Ejeren beslutter selv.", kontakt: "Klinikejer", score: 88 },
+      { virksomhed: "Kontorfællesskab med 20-50 pladser", type: "Ejendom", by: "København", hvorfor: "Mange brugere og fællesarealer, og lejerne forventer et pænt indtryk.", kontakt: "Community manager", score: 81 },
+      { virksomhed: "Advokatkontor med 10-30 ansatte", type: "Rådgivning", by: "Odense", hvorfor: "Kunder på besøg hver dag. Ofte utilfreds med nuværende leverandør.", kontakt: "Kontorchef", score: 74 }
+    ],
+    lockedLeads: 5, segmenter: 3, konkurrenter: 4
+  };
+
+  var $ = function (id) { return document.getElementById(id); };
+  function el(tag, cls, text) {
+    var n = document.createElement(tag);
+    if (cls) n.className = cls;
+    if (text != null) n.textContent = text;
+    return n;
+  }
+  function scoreClass(s) { return s >= 80 ? "hot" : s >= 60 ? "warm" : "cold"; }
+  function scoreLabel(s) { return s >= 80 ? "Varm" : s >= 60 ? "Lun" : "Kold"; }
+
+  function renderExample(r) {
+    var box = $("results");
+    var head = el("div", "results-head");
+    head.appendChild(el("span", "tag", "Eksempel på et resultat"));
+    head.appendChild(el("h3", null, "Sådan kan analysen se ud for " + r.company));
+    head.appendChild(el("p", null, r.resume));
+    box.appendChild(head);
+
+    var grid = el("div", "leads");
+    r.leads.slice(0, FREE).forEach(function (l) {
+      var c = el("article", "lead-card");
+      var top = el("div", "lead-top");
+      top.appendChild(el("h4", null, l.virksomhed));
+      top.appendChild(el("span", "score " + scoreClass(l.score), scoreLabel(l.score) + " · " + l.score));
+      c.appendChild(top);
+      c.appendChild(el("div", "lead-meta", l.type + " · " + l.by));
+      c.appendChild(el("p", "lead-why", l.hvorfor));
+      var k = el("p", "lead-contact", "Kontakt: ");
+      k.appendChild(el("b", null, l.kontakt));
+      c.appendChild(k);
+      grid.appendChild(c);
+    });
+    box.appendChild(grid);
+
+    var locked = el("div", "locked");
+    var bg = el("div", "locked-bg");
+    bg.setAttribute("aria-hidden", "true");
+    for (var i = 0; i < 3; i++) {
+      var g = el("div", "ghost");
+      ["w60", "w80", "w40", "acc"].forEach(function (w) { g.appendChild(el("div", "bar " + w)); });
+      bg.appendChild(g);
+    }
+    locked.appendChild(bg);
+    var over = el("div", "locked-over");
+    var lb = el("div", "locked-box");
+    lb.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="10" width="16" height="11" rx="3" fill="none" stroke="var(--accent)" stroke-width="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3" fill="none" stroke="var(--accent)" stroke-width="2" stroke-linecap="round"/></svg>';
+    lb.appendChild(el("h4", null, "Resten af analysen låses op efter et møde"));
+    var ul = el("ul", "locked-list");
+    ul.appendChild(el("li", null, r.lockedLeads + " kunder mere"));
+    ul.appendChild(el("li", null, r.segmenter + " målgrupper"));
+    ul.appendChild(el("li", null, r.konkurrenter + " konkurrenter"));
+    ul.appendChild(el("li", null, "Plan for kontakt"));
+    lb.appendChild(ul);
+    var a = el("a", "btn btn-primary", "Book møde");
+    a.href = "#book";
+    lb.appendChild(a);
+    over.appendChild(lb);
+    locked.appendChild(over);
+    box.appendChild(locked);
+  }
+
+  function encode(form) {
+    return new URLSearchParams(new FormData(form)).toString();
+  }
+
+  function validEmail(v) { return /^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(v); }
+
+  async function send(form) {
+    var res = await fetch("/", {
+      method: "POST",
+      headers: { "Content-Type": "application/x-www-form-urlencoded" },
+      body: encode(form)
+    });
+    if (!res.ok) throw new Error("HTTP " + res.status);
+  }
+
+  $("map-form").addEventListener("submit", async function (e) {
+    e.preventDefault();
+    var st = $("map-status");
+    st.className = "status";
+    var need = ["m-company", "m-industry", "m-product", "m-target", "m-name"];
+    var missing = need.some(function (id) { return !$(id).value.trim(); });
+    if (missing || !validEmail($("m-email").value.trim())) {
+      st.className = "status err";
+      st.textContent = "Udfyld virksomhed, branche, hvad I sælger, målgruppe, navn og en gyldig e-mail.";
+      return;
+    }
+    var btn = $("map-btn");
+    btn.disabled = true;
+    st.textContent = "Sender …";
+    try {
+      await send(this);
+      st.textContent = "Tak! Vi sender jeres første 3 kunder til " + $("m-email").value.trim() + " inden for to hverdage.";
+      if (!$("b-company").value) $("b-company").value = $("m-company").value.trim();
+      if (!$("b-name").value) $("b-name").value = $("m-name").value.trim();
+      if (!$("b-email").value) $("b-email").value = $("m-email").value.trim();
+      this.reset();
+    } catch (err) {
+      st.className = "status err";
+      st.textContent = "Det lykkedes ikke at sende. Prøv igen om lidt.";
+    } finally {
+      btn.disabled = false;
+    }
+  });
+
+  $("book-form").addEventListener("submit", async function (e) {
+    e.preventDefault();
+    var note = $("book-note");
+    note.className = "form-note";
+    if (!$("b-name").value.trim() || !validEmail($("b-email").value.trim())) {
+      note.className = "form-note err";
+      note.textContent = "Udfyld dit navn og en gyldig e-mail.";
+      return;
+    }
+    var btn = $("book-btn");
+    btn.disabled = true;
+    note.textContent = "Sender …";
+    try {
+      await send(this);
+      note.textContent = "Tak! Din booking er modtaget. Vi kontakter dig for at bekræfte mødet.";
+      this.reset();
+    } catch (err) {
+      note.className = "form-note err";
+      note.textContent = "Det lykkedes ikke at sende. Prøv igen om lidt.";
+    } finally {
+      btn.disabled = false;
+    }
+  });
+
+  renderExample(EXAMPLE);
+})();
+</script>
+</body>
+</html>
