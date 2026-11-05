@@ -170,9 +170,12 @@ textarea { min-height: 96px; resize: vertical; }
 .price { display: grid; gap: 4px; padding: 18px 20px; border-radius: 16px; background: var(--bg); }
 .price b { font-family: var(--display); font-size: 20px; }
 .price span { color: var(--muted); font-size: 15px; }
-.book-form { display: grid; grid-template-columns: 1fr 1fr; gap: 14px 16px; min-width: 0; }
-.book-form .full { grid-column: 1 / -1; }
-@media (max-width: 520px) { .book-form { grid-template-columns: 1fr; } }
+.contact-cal { grid-template-columns: 1fr; gap: 28px; }
+.contact-cal .text { max-width: 640px; }
+.cal-wrap { display: grid; gap: 12px; min-width: 0; }
+.cal-inline { width: 100%; min-height: 520px; overflow: auto; border-radius: 16px; }
+.cal-fallback { font-size: 14px; color: var(--muted); }
+.cal-fallback a { color: var(--accent); font-weight: 600; }
 .form-note { font-size: 14px; color: var(--accent); min-height: 1.4em; grid-column: 1 / -1; }
 .form-note.err { color: var(--warm); }
 
@@ -325,27 +328,17 @@ footer { padding-bottom: 96px; }
   </section>
 
   <section id="book">
-    <div class="contact">
+    <div class="contact contact-cal">
       <div class="text">
         <span class="eyebrow">Book et møde</span>
         <h2>Lås hele analysen op</h2>
-        <p>Book et møde med NESLCreatives. Vi gennemgår jeres markedsmapping sammen, og når I har købt analysen, får I adgang til alle kunder, målgrupper og konkurrenter.</p>
+        <p>Vælg et tidspunkt, der passer jer. Vi gennemgår jeres markedsmapping sammen, og når I har købt analysen, får I adgang til alle kunder, målgrupper og konkurrenter.</p>
         <div class="price"><b>Fuld markedsmapping</b><span>Pris aftales på mødet</span></div>
       </div>
-      <form class="book-form" id="book-form" name="booking" novalidate>
-        <label class="hp">Udfyld ikke dette felt<input name="_honey" tabindex="-1" autocomplete="off"></label>
-        <label for="b-name">Navn<input id="b-name" name="navn" autocomplete="name" required></label>
-        <label for="b-company">Virksomhed<input id="b-company" name="virksomhed" autocomplete="organization"></label>
-        <label for="b-email">E-mail<input id="b-email" name="email" type="email" autocomplete="email" required></label>
-        <label for="b-phone">Telefon<input id="b-phone" name="telefon" type="tel" autocomplete="tel"></label>
-        <label for="b-date">Ønsket dato<input id="b-date" name="dato" type="date"></label>
-        <label for="b-time">Tidspunkt
-          <select id="b-time" name="tidspunkt"><option>Formiddag</option><option>Eftermiddag</option></select>
-        </label>
-        <label class="full" for="b-msg">Besked (valgfri)<textarea id="b-msg" name="besked"></textarea></label>
-        <button class="btn btn-primary full" type="submit" id="book-btn">Book møde</button>
-        <p class="form-note" id="book-note" role="status"></p>
-      </form>
+      <div class="cal-wrap">
+        <div id="cal-inline" class="cal-inline"></div>
+        <p class="cal-fallback">Kan du ikke se kalenderen? <a href="https://cal.com/sebastian-lund-mhi1he/moede-med-neslcreatives" target="_blank" rel="noopener">Åbn den i en ny fane</a>.</p>
+      </div>
     </div>
   </section>
 
@@ -474,9 +467,6 @@ footer { padding-bottom: 96px; }
     try {
       await send(this, "Ny markedsmapping: " + $("m-company").value.trim());
       st.textContent = "Tak! Vi sender jeres første 3 kunder til " + $("m-email").value.trim() + " inden for to hverdage.";
-      if (!$("b-company").value) $("b-company").value = $("m-company").value.trim();
-      if (!$("b-name").value) $("b-name").value = $("m-name").value.trim();
-      if (!$("b-email").value) $("b-email").value = $("m-email").value.trim();
       this.reset();
     } catch (err) {
       st.className = "status err";
@@ -486,32 +476,23 @@ footer { padding-bottom: 96px; }
     }
   });
 
-  $("book-form").addEventListener("submit", async function (e) {
-    e.preventDefault();
-    var note = $("book-note");
-    note.className = "form-note";
-    if (!$("b-name").value.trim() || !validEmail($("b-email").value.trim())) {
-      note.className = "form-note err";
-      note.textContent = "Udfyld dit navn og en gyldig e-mail.";
-      return;
-    }
-    var btn = $("book-btn");
-    btn.disabled = true;
-    note.textContent = "Sender …";
-    try {
-      await send(this, "Ny mødebooking: " + $("b-name").value.trim());
-      note.textContent = "Tak! Din booking er modtaget. Vi kontakter dig for at bekræfte mødet.";
-      this.reset();
-    } catch (err) {
-      note.className = "form-note err";
-      note.textContent = failCopy(err);
-    } finally {
-      btn.disabled = false;
-    }
-  });
 
   renderExample(EXAMPLE);
 })();
+</script>
+<script>
+  (function (C, A, L) { var p = function (a, ar) { a.q.push(ar); }; var d = C.document; C.Cal = C.Cal || function () { var cal = C.Cal; var ar = arguments; if (!cal.loaded) { cal.ns = {}; cal.q = cal.q || []; d.head.appendChild(d.createElement("script")).src = A; cal.loaded = true; } if (ar[0] === L) { var api = function () { p(api, arguments); }; var namespace = ar[1]; api.q = api.q || []; if (typeof namespace === "string") { cal.ns[namespace] = cal.ns[namespace] || api; p(cal.ns[namespace], ar); p(cal, ["initNamespace", namespace]); } else p(cal, ar); return; } p(cal, ar); }; })(window, "https://app.cal.com/embed/embed.js", "init");
+  Cal("init", "moede", { origin: "https://cal.com" });
+  Cal.ns.moede("inline", {
+    elementOrSelector: "#cal-inline",
+    calLink: "sebastian-lund-mhi1he/moede-med-neslcreatives",
+    config: { layout: "month_view" }
+  });
+  Cal.ns.moede("ui", {
+    layout: "month_view",
+    hideEventTypeDetails: false,
+    cssVarsPerTheme: { light: { "cal-brand": "#127C74" }, dark: { "cal-brand": "#4FC2B5" } }
+  });
 </script>
 </body>
 </html>

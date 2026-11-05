@@ -5,7 +5,8 @@ Hjemmeside for NESLCreatives: AI-effektivisering, marketing og markedsmapping fo
 ## Opbygning
 - Én statisk side: `index.html` (HTML, CSS og JS i samme fil, ingen build-trin).
 - Hostes på Netlify (neslcreatives.netlify.app). Netlify Forms bruges ikke.
-- Formularerne sendes med `fetch` til Web3Forms (`FORM_ENDPOINT` og `ACCESS_KEY` i scriptet), som videresender dem som mail. `_honey` er et spamfelt.
+- Markedsmapping-formularen sendes med `fetch` til Web3Forms (`FORM_ENDPOINT` og `ACCESS_KEY` i scriptet), som videresender den som mail. `_honey` er et spamfelt.
+- Møder bookes via en indlejret Cal.com-kalender (`#cal-inline`, link `sebastian-lund-mhi1he/moede-med-neslcreatives`).
 - Al tekst på siden er på dansk.
 
 ## Design
